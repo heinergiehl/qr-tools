@@ -33,7 +33,7 @@ jobs:
       # 4) Install & build
       - name: Install & Build
         run: |
-          npm ci
+          npm install
           npm run build
       # 5) Prepare SSH key
       - name: Copy SSH key
@@ -60,6 +60,6 @@ jobs:
             cd ${{ env.APP_DIR }}
             git fetch origin
             git reset --hard origin/main
-            npm ci
+            npm install
             npm run build
             pm2 reload ecosystem.config.js --only ${{ env.PM2_APP }} --env production
