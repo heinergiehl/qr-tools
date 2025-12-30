@@ -175,13 +175,17 @@ export const QrCustomizer = ({ settings, onChange }: QrCustomizerProps) => {
             <Input
               type="color"
               value={settings.colors.foreground}
-              onChange={(event) => update({ colors: { foreground: event.target.value } })}
+              onChange={(event) =>
+                update({ colors: { foreground: event.target.value, background: settings.colors.background } })
+              }
               aria-label="Foreground color"
             />
             <Input
               type="text"
               value={settings.colors.foreground}
-              onChange={(event) => update({ colors: { foreground: event.target.value } })}
+              onChange={(event) =>
+                update({ colors: { foreground: event.target.value, background: settings.colors.background } })
+              }
               aria-label="Foreground color hex"
             />
           </div>
