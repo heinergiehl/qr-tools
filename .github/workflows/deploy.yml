@@ -1,4 +1,4 @@
-name: CI/CD – QR Tools
+name: CI/CD - QR Tools
 on:
   push:
     branches: [ main ]
@@ -33,6 +33,7 @@ jobs:
       - name: Install & Build
         run: |
           bun install
+          bun add --no-save lightningcss-linux-x64-gnu
           bun run build
       # 5) Prepare SSH key
       - name: Copy SSH key
@@ -60,5 +61,6 @@ jobs:
             git fetch origin
             git reset --hard origin/main
             bun install
+            bun add --no-save lightningcss-linux-x64-gnu
             bun run build
             pm2 reload ecosystem.config.js --only ${{ env.PM2_APP }} --env production
