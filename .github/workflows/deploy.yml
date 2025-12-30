@@ -14,12 +14,11 @@ jobs:
       # 1) Checkout your repo
       - name: Checkout
         uses: actions/checkout@v3
-      # 2) Install Node.js
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      # 2) Install Bun
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: 22
-          cache: "bun"
+          bun-version: "latest"
       # 3) (Optional) Create .env.production on the runner
       #    Only include the vars your app actually needs.
       - name: Create .env.production
@@ -34,6 +33,7 @@ jobs:
       - name: Install & Build
         run: |
           bun install
+          bun add --no-save lightningcss-linux-x64-gnu
           bun run build
       # 5) Prepare SSH key
       - name: Copy SSH key
@@ -61,5 +61,6 @@ jobs:
             git fetch origin
             git reset --hard origin/main
             bun install
+            bun add --no-save lightningcss-linux-x64-gnu
             bun run build
             pm2 reload ecosystem.config.js --only ${{ env.PM2_APP }} --env production
