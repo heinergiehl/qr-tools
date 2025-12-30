@@ -77,4 +77,4 @@ jobs:
             bun install
             bun add --no-save lightningcss-linux-x64-gnu
             bun run build
-            pm2 reload ecosystem.config.js --only ${{ env.PM2_APP }} --env production
+            pm2 describe ${{ env.PM2_APP }} >/dev/null 2>&1 && pm2 reload ${{ env.PM2_APP }} --env production || pm2 start "bun run start -- --port ${{ env.APP_PORT }}" --name ${{ env.PM2_APP }} --env production
