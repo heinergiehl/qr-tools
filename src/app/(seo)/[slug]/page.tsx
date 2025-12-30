@@ -12,13 +12,14 @@ import { toolRouteByGenerator } from "@/lib/seo/tools";
 import { useCases } from "@/lib/seo/useCases";
 
 type UseCasePageProps = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 export const generateStaticParams = async () => useCases.map((useCase) => ({ slug: useCase.slug }));
 
-export const generateMetadata = ({ params }: UseCasePageProps): Metadata => {
-  const useCase = useCases.find((item) => item.slug === params.slug);
+export const generateMetadata = async ({ params }: UseCasePageProps): Promise<Metadata> => {
+  const { slug } = await params;
+  const useCase = useCases.find((item) => item.slug === slug);
   if (!useCase) return {};
 
   return buildMetadata({
@@ -29,8 +30,9 @@ export const generateMetadata = ({ params }: UseCasePageProps): Metadata => {
   });
 };
 
-export default function UseCasePage({ params }: UseCasePageProps) {
-  const useCase = useCases.find((item) => item.slug === params.slug);
+export default async function UseCasePage({ params }: UseCasePageProps) {
+  const { slug } = await params;
+  const useCase = useCases.find((item) => item.slug === slug);
   if (!useCase) {
     notFound();
   }
