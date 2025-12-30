@@ -10,6 +10,7 @@ jobs:
       APP_PORT: 3000
       APP_DIR: /var/www/myapps/qr-tools
       PM2_APP: qr-tools
+      REPO_SSH: git@github.com:${{ github.repository }}.git
     steps:
       # 1) Checkout your repo
       - name: Checkout
@@ -50,6 +51,19 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             set -e
+            mkdir -p ~/.ssh
+            chmod 700 ~/.ssh
+            ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+            # Ensure app dir exists and is a git checkout
+            if [ ! -d "${{ env.APP_DIR }}/.git" ]; then
+              if command -v sudo >/dev/null 2>&1; then
+                sudo mkdir -p "${{ env.APP_DIR }}"
+                sudo chown -R "$USER":"$USER" "${{ env.APP_DIR }}"
+              else
+                mkdir -p "${{ env.APP_DIR }}"
+              fi
+              git clone "${{ env.REPO_SSH }}" "${{ env.APP_DIR }}"
+            fi
             # A) Regenerate .env.production on the server
             cat > ${{ env.APP_DIR }}/.env.production <<EOF
             APP_PORT=${{ env.APP_PORT }}
