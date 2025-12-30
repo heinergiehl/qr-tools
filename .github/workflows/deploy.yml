@@ -1,13 +1,13 @@
 name: CI/CD - QR Tools
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
       # Change this if your app listens on a different port
-      APP_PORT: 3005
+      APP_PORT: 3000
       APP_DIR: /var/www/myapps/qr-code-generator
       PM2_APP: qr-code-generator
     steps:
